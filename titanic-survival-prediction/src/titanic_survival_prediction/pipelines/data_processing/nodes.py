@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.utils import resample
 from typing import Tuple, Dict
+from typing import Any
 
 
 
@@ -29,37 +30,45 @@ def split_data(df: pd.DataFrame, parameters: Dict) -> Tuple[pd.DataFrame, pd.Dat
 
     return X_train, X_test, y_train, y_test
 
-def balance_train_data(X_train: pd.DataFrame, y_train: pd.Series, target_column: str = "potabilidade") -> tuple[pd.DataFrame, pd.Series]:
+def balance_and_format_train_data(
+    X_train: pd.DataFrame,
+    y_train: pd.Series,
+    parameters: Dict[str, Any]
+) -> Tuple[pd.DataFrame, pd.Series]:
     """
-    Node do Kedro para balancear a classe minoritária usando o resample (upsample)
-    apenas no conjunto de treino.
+    Node do Kedro para filtrar as features, fazer o upsample da classe minoritária
+    e retornar o X e y de treino prontos para modelagem.
     """
-    # Junta temporariamente X_train e y_train para facilitar a manipulação
-    print("Starting process to balance the training data...")
-    df_train = X_train.copy()
-    df_train[target_column] = y_train
+    print("Starting process to filter features and balance training data...")
+    
+    # Extrai os parâmetros necessários
+    features = parameters["features"]
+    target_column = parameters["target_column"]
+    
+    # The split node separates the target, so recombine it only for resampling.
+    df_filtered = X_train[features].copy()
+    df_filtered[target_column] = y_train
 
-    # Separa maioria e minoria
-    df_majority = df_train[df_train[target_column] == 0]
-    df_minority = df_train[df_train[target_column] == 1]
+    # 2. Separa maioria e minoria para o balanceamento
+    df_majority = df_filtered[df_filtered[target_column] == 0]
+    df_minority = df_filtered[df_filtered[target_column] == 1]
 
-    # Faz o upsample da classe minoritária
+    # 3. Faz o upsample da classe minoritária
     df_minority_upsampled = resample(
         df_minority, 
-        replace=True,                     # sample com reposição
-        n_samples=len(df_majority),       # iguala à quantidade da classe majoritária
-        random_state=42                   # reprodutibilidade
+        replace=True,                       # sample com reposição
+        n_samples=len(df_majority),         # iguala à quantidade da classe majoritária
+        random_state=42                     # reprodutibilidade
     )
 
-    # Junta novamente
+    # 4. Junta novamente
     df_upsampled = pd.concat([df_majority, df_minority_upsampled])
 
-    # Separa de volta em X e y balanceados
+    # 5. Separa em X e y balanceados
     X_train_balanced = df_upsampled.drop(columns=[target_column])
     y_train_balanced = df_upsampled[target_column]
 
     return X_train_balanced, y_train_balanced
-
 
 
 
