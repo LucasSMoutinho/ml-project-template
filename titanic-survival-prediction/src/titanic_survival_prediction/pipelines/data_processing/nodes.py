@@ -1,5 +1,6 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from sklearn.utils import resample
 from typing import Tuple, Dict
 
 
@@ -9,6 +10,7 @@ def split_data(df: pd.DataFrame, parameters: Dict) -> Tuple[pd.DataFrame, pd.Dat
     Node do Kedro para separar os dados em treino e teste.
     """
     # Define a coluna alvo (target) com base nos seus dados (ex: 'potabilidade' ou 'Survived' do titanic)
+    print("Starting process to split the data into training and testing sets...")
     target_col = parameters["target_column"]
     test_size = parameters["test_size"]
     random_state = parameters["random_state"]
@@ -27,7 +29,36 @@ def split_data(df: pd.DataFrame, parameters: Dict) -> Tuple[pd.DataFrame, pd.Dat
 
     return X_train, X_test, y_train, y_test
 
+def balance_train_data(X_train: pd.DataFrame, y_train: pd.Series, target_column: str = "potabilidade") -> tuple[pd.DataFrame, pd.Series]:
+    """
+    Node do Kedro para balancear a classe minoritária usando o resample (upsample)
+    apenas no conjunto de treino.
+    """
+    # Junta temporariamente X_train e y_train para facilitar a manipulação
+    print("Starting process to balance the training data...")
+    df_train = X_train.copy()
+    df_train[target_column] = y_train
 
+    # Separa maioria e minoria
+    df_majority = df_train[df_train[target_column] == 0]
+    df_minority = df_train[df_train[target_column] == 1]
+
+    # Faz o upsample da classe minoritária
+    df_minority_upsampled = resample(
+        df_minority, 
+        replace=True,                     # sample com reposição
+        n_samples=len(df_majority),       # iguala à quantidade da classe majoritária
+        random_state=42                   # reprodutibilidade
+    )
+
+    # Junta novamente
+    df_upsampled = pd.concat([df_majority, df_minority_upsampled])
+
+    # Separa de volta em X e y balanceados
+    X_train_balanced = df_upsampled.drop(columns=[target_column])
+    y_train_balanced = df_upsampled[target_column]
+
+    return X_train_balanced, y_train_balanced
 
 
 
