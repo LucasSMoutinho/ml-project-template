@@ -39,23 +39,33 @@
 # (transcoding), templating and a way to reuse arguments that are frequently repeated. See more here:
 # https://docs.kedro.org/en/stable/data/data_catalog.html
 
+water_potability:
+  type: pandas.CSVDataset
+  filepath: data/04_feature/water_potability.csv
 
-# Dados de Treino e Teste (Features e Target)
 X_train:
   type: pandas.ParquetDataset
   filepath: data/04_feature/X_train.parquet
+
+X_train_balanced:
+  type: pandas.ParquetDataset
+  filepath: data/04_feature/X_train_balanced.parquet
 
 X_test:
   type: pandas.ParquetDataset
   filepath: data/04_feature/X_test.parquet
 
 y_train:
-  type: pandas.ParquetDataset
-  filepath: data/04_feature/y_train.parquet
+  type: pickle.PickleDataset
+  filepath: data/04_feature/y_train.pkl
+
+y_train_balanced:
+  type: pickle.PickleDataset
+  filepath: data/04_feature/y_train_balanced.pkl
 
 y_test:
-  type: pandas.ParquetDataset
-  filepath: data/04_feature/y_test.parquet
+  type: pickle.PickleDataset
+  filepath: data/04_feature/y_test.pkl
 
 
 ######################## kedro output data sets ########################
