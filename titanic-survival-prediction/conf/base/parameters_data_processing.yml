@@ -1,0 +1,5 @@
+# Parâmetros para a divisão dos dados e modelagem
+model_options:
+  target_column: "potabilidade_target"  
+  test_size: 0.2
+  random_state: 42
