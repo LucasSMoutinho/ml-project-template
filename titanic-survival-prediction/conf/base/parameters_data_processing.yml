@@ -3,3 +3,13 @@ model_options:
   target_column: "Potability"  
   test_size: 0.2
   random_state: 42
+  features:
+    - 'ph'
+    - 'Hardness'
+    - 'Solids'
+    - 'Chloramines'
+    - 'Sulfate'
+    - 'Conductivity'
+    - 'Organic_carbon'
+    - 'Trihalomethanes'
+    - 'Turbidity'
