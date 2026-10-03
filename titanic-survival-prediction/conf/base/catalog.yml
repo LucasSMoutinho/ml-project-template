@@ -67,6 +67,10 @@ y_test:
   type: pickle.PickleDataset
   filepath: data/04_feature/y_test.pkl
 
+lgbm_model:
+  type: pickle.PickleDataset
+  filepath: data/06_models/lgbm_model.pkl
+
 
 ######################## kedro output data sets ########################
 companies:
