@@ -1,4 +1,40 @@
 import pandas as pd
+from sklearn.model_selection import train_test_split
+from typing import Tuple, Dict
+
+
+
+def split_data(df: pd.DataFrame, parameters: Dict) -> Tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
+    """
+    Node do Kedro para separar os dados em treino e teste.
+    """
+    # Define a coluna alvo (target) com base nos seus dados (ex: 'potabilidade' ou 'Survived' do titanic)
+    target_col = parameters["target_column"]
+    test_size = parameters["test_size"]
+    random_state = parameters["random_state"]
+
+    # Separa features (X) e target (y)
+    X = df.drop(columns=[target_col])
+    y = df[target_col]
+
+    # Realiza o train_test_split do scikit-learn
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=test_size, random_state=random_state, shuffle=True)
+
+    print(f'train data shape: X - {X_train.shape}, y - {y_train.shape}')
+    print(f'validation data shape: X - {X_test.shape}, y - {y_test.shape}')
+    print(f'test data shape: X - {X_test.shape}, y - {y_test.shape}')
+
+    return X_train, X_test, y_train, y_test
+
+
+
+
+
+
+
+
+##################### Kedro nodes for data processing #####################
 
 
 def _is_true(x: pd.Series) -> pd.Series:
