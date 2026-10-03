@@ -1,0 +1,21 @@
+# This is a boilerplate parameters config generated for pipeline 'data_modelling'
+# using Kedro 1.7.0.
+#
+# Documentation for this file format can be found in "Parameters"
+# Link: https://docs.kedro.org/en/1.7.0/configuration/parameters.html
+
+
+params_lightgbm:
+  boosting_type: gbdt           # Gradient Boosting Decision Tree
+  objective: binary             # Binary classification task
+  metric: binary_logloss        # Metric to evaluate
+  num_leaves: 31                # Maximum number of leaves in one tree
+  learning_rate: 0.05           # Learning rate
+  feature_fraction: 0.9        # Percentage of features to consider for each boosting round
+  bagging_fraction: 0.8        # Percentage of data to use for each boosting round
+  bagging_freq: 5               # Perform bagging every 5 iterations
+  max_depth: -1                 # Maximum depth of the tree (-1 means no limit)
+  min_data_in_leaf: 20          # Minimum number of samples in one leaf
+  lambda_l1: 0.1                # L1 regularization term
+  lambda_l2: 0.2                # L2 regularization term
+  verbosity: 1                  # LightGBM's output
