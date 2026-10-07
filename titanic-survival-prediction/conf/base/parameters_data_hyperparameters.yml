@@ -1,0 +1,14 @@
+# This is a boilerplate parameters config generated for pipelinedata_hyperparameter
+# using Kedro 1.7.0.
+#
+# Documentation for this file format can be found in "Parameters"
+# Link: https://docs.kedro.org/en/1.7.0/configuration/parameters.html
+
+params:
+  n_estimator: 1000
+  num_leave: [20, 31, 50]
+  learning_rat: [0.001, 0.05]    
+  max_dept: [5, 10]             
+  lambda_l: 0.1                
+  lambda_ll: 0.2
+  verbosit: -1
