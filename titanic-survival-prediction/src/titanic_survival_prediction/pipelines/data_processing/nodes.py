@@ -22,7 +22,12 @@ def split_data(
     y = df[target_col]
 
     X_train_full, X_test, y_train_full, y_test = train_test_split(
-        X, y, test_size=test_size, random_state=random_state, shuffle=True
+        X,
+        y,
+        test_size=test_size,
+        random_state=random_state,
+        shuffle=True,
+        stratify=y,
     )
     X_train, X_valid, y_train, y_valid = train_test_split(
         X_train_full,
@@ -30,12 +35,57 @@ def split_data(
         test_size=valid_size,
         random_state=random_state,
         shuffle=True,
+        stratify=y_train_full,
     )
 
     print(f"train data shape: X - {X_train.shape}, y - {y_train.shape}")
     print(f"validation data shape: X - {X_valid.shape}, y - {y_valid.shape}")
     print(f"test data shape: X - {X_test.shape}, y - {y_test.shape}")
     return X_train, X_test, X_valid, y_train, y_test, y_valid
+
+
+def summarize_data_quality(
+    df: pd.DataFrame, parameters: Dict[str, Any]
+) -> Dict[str, Any]:
+    """Summarize missingness, duplicates, feature ranges, and target distribution."""
+    target_column = parameters["target_column"]
+    target = df[target_column]
+
+    column_summary: Dict[str, Any] = {}
+    for column in df.columns:
+        values = df[column]
+        summary: Dict[str, Any] = {
+            "dtype": str(values.dtype),
+            "missing_count": int(values.isna().sum()),
+            "missing_fraction": float(values.isna().mean()),
+            "unique_count": int(values.nunique(dropna=True)),
+        }
+        if pd.api.types.is_numeric_dtype(values):
+            summary["min"] = None if values.dropna().empty else float(values.min())
+            summary["median"] = (
+                None if values.dropna().empty else float(values.median())
+            )
+            summary["max"] = None if values.dropna().empty else float(values.max())
+        column_summary[str(column)] = summary
+
+    target_counts = target.value_counts(dropna=False)
+    return {
+        "row_count": int(len(df)),
+        "column_count": int(len(df.columns)),
+        "duplicate_row_count": int(df.duplicated().sum()),
+        "target_column": target_column,
+        "target_class_counts": {
+            str(label): int(count) for label, count in target_counts.items()
+        },
+        "target_missing_count": int(target.isna().sum()),
+        "unexpected_target_values": [
+            value.item() if hasattr(value, "item") else value
+            for value in target.dropna().unique().tolist()
+            if value not in (0, 1)
+        ],
+        "columns": column_summary,
+    }
+
 
 def balance_and_format_train_data(
     X_train: pd.DataFrame,

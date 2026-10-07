@@ -1,8 +1,18 @@
 from kedro.pipeline import Pipeline, node, pipeline
-from .nodes import split_data, balance_and_format_train_data
+from .nodes import (
+    balance_and_format_train_data,
+    split_data,
+    summarize_data_quality,
+)
 
 def create_pipeline(**kwargs) -> Pipeline:
     return pipeline([
+        node(
+            func=summarize_data_quality,
+            inputs=["water_potability", "params:model_options"],
+            outputs="data_quality_report",
+            name="summarize_data_quality_node",
+        ),
         node(
             func=split_data,
             inputs=["water_potability", "params:model_options"],
