@@ -4,11 +4,12 @@
 # Documentation for this file format can be found in "Parameters"
 # Link: https://docs.kedro.org/en/1.7.0/configuration/parameters.html
 
-params:
-  n_estimator: 1000
-  num_leave: [20, 31, 50]
-  learning_rat: [0.001, 0.05]    
-  max_dept: [5, 10]             
-  lambda_l: 0.1                
-  lambda_ll: 0.2
-  verbosit: -1
+hyperparameters_options:
+  param_grid:
+    n_estimators: [100, 300]
+    num_leaves: [7, 15]
+    learning_rate: [0.03, 0.05]
+    max_depth: [3, 5]
+    min_child_samples: [30]
+    reg_alpha: [0.5, 1.0]
+    reg_lambda: [1.0, 5.0]
