@@ -10,8 +10,8 @@ def create_pipeline(**kwargs) -> Pipeline:
         node(
             func=train_lightgbm_model,
             inputs=[
-                "X_train_balanced", 
-                "y_train_balanced", 
+                "X_train",
+                "y_train",
                 "X_valid", 
                 "y_valid", 
                 "params:params_lightgbm"
