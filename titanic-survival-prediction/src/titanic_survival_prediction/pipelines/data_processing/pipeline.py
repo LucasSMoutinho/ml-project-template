@@ -6,7 +6,14 @@ def create_pipeline(**kwargs) -> Pipeline:
         node(
             func=split_data,
             inputs=["water_potability", "params:model_options"],
-            outputs=["X_train", "X_test", "y_train", "y_test"],
+            outputs=[
+                "X_train",
+                "X_test",
+                "X_valid",
+                "y_train",
+                "y_test",
+                "y_valid",
+            ],
             name="split_data_node",
         ),
         node(
