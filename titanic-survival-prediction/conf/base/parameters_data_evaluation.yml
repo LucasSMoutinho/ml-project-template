@@ -3,3 +3,8 @@
 #
 # Documentation for this file format can be found in "Parameters"
 # Link: https://docs.kedro.org/en/1.7.0/configuration/parameters.html
+
+# O modelo treinado salvo em Pickle (.pkl)
+lgbm_model:
+  type: pickle.PickleDataset
+  filepath: data/06_models/lgbm_model.pkl

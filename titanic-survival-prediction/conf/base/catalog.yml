@@ -79,6 +79,11 @@ lgbm_model:
   type: pickle.PickleDataset
   filepath: data/06_models/lgbm_model.pkl
 
+# As métricas geradas pela avaliação
+model_metrics:
+  type: json.JSONDataset
+  filepath: data/08_reporting/model_metrics.json
+
 
 ######################## kedro output data sets ########################
 companies:
