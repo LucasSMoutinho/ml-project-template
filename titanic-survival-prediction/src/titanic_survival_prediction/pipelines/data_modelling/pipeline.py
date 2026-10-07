@@ -12,8 +12,8 @@ def create_pipeline(**kwargs) -> Pipeline:
             inputs=[
                 "X_train_balanced", 
                 "y_train_balanced", 
-                "X_test",
-                "y_test", 
+                "X_valid", 
+                "y_valid", 
                 "params:params_lightgbm"
             ],
             outputs="lgbm_model",
