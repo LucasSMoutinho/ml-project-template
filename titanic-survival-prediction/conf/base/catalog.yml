@@ -43,6 +43,10 @@ water_potability:
   type: pandas.CSVDataset
   filepath: data/04_feature/water_potability.csv
 
+data_quality_report:
+  type: json.JSONDataset
+  filepath: data/08_reporting/data_quality_report.json
+
 X_train:
   type: pandas.ParquetDataset
   filepath: data/04_feature/X_train.parquet
@@ -83,6 +87,23 @@ lgbm_model:
 model_metrics:
   type: json.JSONDataset
   filepath: data/08_reporting/model_metrics.json
+
+model_metrics_best:
+  type: json.JSONDataset
+  filepath: data/08_reporting/model_metrics_best.json
+# As métricas geradas pela avaliação
+
+best_lgbm_model:
+  type: pickle.PickleDataset
+  filepath: data/06_models/best_lgbm_model.pkl
+
+best_hyperparameters:
+  type: json.JSONDataset
+  filepath: data/08_reporting/best_hyperparameters.json
+
+final_model:
+  type: pickle.PickleDataset
+  filepath: data/06_models/lgbm_hyper_model.pkl
 
 
 ######################## kedro output data sets ########################
