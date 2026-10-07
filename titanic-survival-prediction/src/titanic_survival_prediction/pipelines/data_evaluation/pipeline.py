@@ -14,7 +14,7 @@ def create_pipeline(**kwargs) -> Pipeline:
         node(
             func=evaluate_model,
             inputs=[
-                "lgbm_model",  # O objeto modelo salvo pelo node anterior (ou carregado via .pkl no catalog)
+                "final_model",  # O objeto modelo salvo pelo node anterior (ou carregado via .pkl no catalog)
                 "X_train", 
                 "y_train",
                 "X_valid", 
@@ -22,7 +22,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 "X_test", 
                 "y_test"
             ],
-            outputs="model_metrics",
+            outputs="model_metrics_best",
             name="evaluate_model_node",
         )
     ])
